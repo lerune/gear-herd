@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -60,7 +60,10 @@ const useStyles = makeStyles(theme => ({
 
 const SignUp = () => {
   const classes = useStyles();
-
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   return (
     <Mutation mutation={REGISTER}>
       {(register, { data }) => (
@@ -73,7 +76,25 @@ const SignUp = () => {
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
-            <form className={classes.form} noValidate>
+            <form
+              className={classes.form}
+              noValidate
+              onSubmit={e => {
+                e.preventDefault();
+                register({
+                  variables: {
+                    email: email,
+                    password: password,
+                    firstName: firstName,
+                    lastName: lastName
+                  }
+                });
+                setEmail("");
+                setPassword("");
+                setFirstName("");
+                setLastName("");
+              }}
+            >
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -85,6 +106,7 @@ const SignUp = () => {
                     id="firstName"
                     label="First Name"
                     autoFocus
+                    onChange={e => setFirstName(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -96,6 +118,7 @@ const SignUp = () => {
                     label="Last Name"
                     name="lastName"
                     autoComplete="lname"
+                    onChange={e => setLastName(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -107,6 +130,7 @@ const SignUp = () => {
                     label="Email Address"
                     name="email"
                     autoComplete="email"
+                    onChange={e => setEmail(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -119,6 +143,7 @@ const SignUp = () => {
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    onChange={e => setPassword(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
